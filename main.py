@@ -1,17 +1,37 @@
+from os.path import join
 import pygame
 
 pygame.init()
 
-width, hight = 800, 600
+WIDTH, HEIGHT = 800, 600
 Fps = 120
 
 pygame.display.set_caption("Legand of Ninja Frog")
-window = pygame.display.set_mode((width, hight))
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+
+def get_background(name):
+    image = pygame.image.load(join("assets", "Background", name))
+    _, _, width, height = image.get_rect()
+
+    tiles = []
+
+    for i in range (WIDTH // width + 1):
+        for j in range(HEIGHT // height + 1):
+            top_left_corner = (i * width, j * height)
+            tiles.append(top_left_corner)
+
+    return tiles, image
+
+def draw(window, background, bg_image):
+    for tile in background:
+        window.blit(bg_image, tile)
+    pygame.display.update()    
 
 def main(window):
     clock = pygame.time.Clock()
-
+    background, bg_image = get_background("Blue.png")
     running = True
+    
     while running:
         clock.tick(Fps)
 
@@ -19,6 +39,8 @@ def main(window):
             if event.type == pygame.QUIT:
                 running = False
                 break
+
+        draw(window, background, bg_image)
 
     pygame.quit()
     quit()
